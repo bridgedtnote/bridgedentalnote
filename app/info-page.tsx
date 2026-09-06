@@ -1,0 +1,39 @@
+import Link from "next/link";
+import {ArrowRight, FileText, ShieldCheck} from "lucide-react";
+import {SiteShell} from "./site-shell";
+import {CallToAction} from "./call-to-action";
+const content:Record<string,string[]>={
+about:["ABOUT US","환자와 치과를\n이해로 잇습니다.","진료실에서 나눈 설명이 일상에서도 이어지도록, 환자의 눈높이와 치과의 진료 흐름을 함께 생각합니다."],
+products:["PRODUCTS & SERVICES","설명은 더 쉽게,\n전달은 더 편하게.","인쇄물, 휴대폰, 대기실 화면과 퀴즈. 우리 치과에 필요한 전달 형태를 살펴보세요."],
+cases:["USE SCENARIOS","진료실에서 집까지,\n끊기지 않는 안내.","실제 고객 후기가 아닌 활용 시나리오입니다. 치과의 진료 흐름에 맞춰 안내자료를 활용하는 방법을 보여드립니다."],
+resources:["RESOURCES","쉽게 설명하는 방법을\n함께 쌓아갑니다.","환자 안내에 도움이 되는 주제별 자료를 준비하고 있습니다."],
+faq:["FAQ","도입 전에 궁금한 점,\n차근차근 확인하세요.","자료의 사용 방법과 맞춤 적용, 의료정보 확인 원칙을 안내합니다."],
+sample:["FREE SAMPLE","우리 치과에 맞는지\n한 장으로 확인하세요.","큰 글씨와 그림, 짧은 문장으로 구성한 환자 안내자료를 살펴보는 첫 단계입니다. 현재 신청 화면을 준비하고 있습니다."],
+contact:["CONTACT","우리 치과에 필요한\n안내부터 시작하세요.","기본 안내자료부터 맞춤 제작까지, 필요한 문의 유형을 확인해 보세요. 현재 온라인 문의 접수는 준비 중입니다."]};
+export function InfoPage({type}:{type:string}){const [tag,title,intro]=content[type];return <SiteShell><section className="subhero"><div className="wrap"><span className="section-kicker">{tag}</span><h1>{title.split("\n").map((s,i)=><span key={s}>{i>0&&<br/>}{s}</span>)}</h1><p>{intro}</p>{type!=="sample"&&<Link className="btn primary" href="/sample">무료 샘플 받아보기 <ArrowRight size={18}/></Link>}</div></section>{type==="products"?<Products/>:type==="faq"?<FAQ/>:type==="sample"||type==="contact"?<FormPage type={type}/>:type==="about"?<About/>:type==="cases"?<Cases/>:<Resources/>}{type!=="sample"&&<CallToAction/>}</SiteShell>}
+function Safety(){return <aside className="safety-note"><ShieldCheck size={22}/><p>의료 안내자료는 최종 사용 전 담당 치과의사가 확인해야 합니다. 환자의 상태와 치과의 진료 방침에 맞게 사용하며, 개별 진료와 상담을 대신하지 않습니다.</p></aside>}
+const products=[
+["인쇄용 환자 안내지","큰 글씨와 그림을 중심으로 만든 치료별 주의사항 자료입니다.","긴 글을 읽기 어렵거나 설명을 집에서 다시 확인하기 어려운 상황","어르신 환자와 보호자, 진료실·데스크 직원","인쇄용 PDF 안내지","진료실에서 그림을 보며 설명하고, 출력한 자료를 환자에게 전달합니다."],
+["모바일 안내 콘텐츠","문자와 QR을 이용해 환자 휴대폰으로 전달하는 이미지형 자료입니다.","종이 안내지를 잃어버리거나 필요할 때 찾기 어려운 상황","휴대폰을 사용하는 환자와 보호자, 데스크 직원","모바일 이미지와 문자·QR 활용용 자료","치과에서 사용하는 문자 발송 방식이나 QR에 연결해 안내합니다. 링크 연결 방식은 도입 시 확인합니다."],
+["대기실 화면 콘텐츠","대기실 모니터에서 반복해서 보여주는 슬라이드 또는 짧은 영상입니다.","대기 중 환자가 이해하기 쉬운 교육자료가 부족한 상황","대기 중인 환자와 보호자, 화면 관리 담당자","화면용 슬라이드 또는 짧은 영상","치과 모니터의 화면 비율과 재생 환경에 맞춰 반복 재생합니다."],
+["참여형 교육 게임","환자가 퀴즈를 풀면서 치료 및 구강관리 정보를 기억하도록 돕는 콘텐츠입니다.","설명을 듣기만 할 때 핵심 내용을 되짚어 보기 어려운 상황","퀴즈에 참여하는 환자와 보호자, 환자교육 담당자","퀴즈형 참여 콘텐츠","환자교육 전후에 짧은 퀴즈로 핵심 내용을 확인합니다. 기기와 운영 방식은 도입 시 협의합니다."]];
+function Products(){return <section className="section wrap"><div className="detail-grid">{products.map(([title,text,...facts],i)=><article key={title}><span>0{i+1}</span><h2>{title}</h2><p>{text}</p><dl className="product-facts">{facts.map((x,j)=><div key={x}><dt>{["해결하는 문제","주요 사용자","제공 형태","활용 방법"][j]}</dt><dd>{x}</dd></div>)}</dl><Link className="text-link" href="/sample">무료 샘플 받아보기 <ArrowRight size={16}/></Link></article>)}</div><Safety/></section>}
+function About(){const items=[
+["설명과 이해 사이에서 시작했습니다","진료실에서는 이해한 것 같아도, 집에 돌아가면 주의사항이 가물가물할 수 있습니다. 치과 직원은 같은 내용을 여러 번 설명합니다. 브릿지덴탈노트는 이 두 가지 어려움을 함께 풀기 위해 시작했습니다."],
+["어르신이 읽기 쉬운 기준","한 문장에는 한 가지 내용을 담고, 글씨는 크게, 그림은 직관적으로 구성합니다. 익숙하지 않은 전문용어를 쉬운 말로 바꾸고, 환자가 해야 할 일을 먼저 보여줍니다."],
+["진료 흐름을 아는 안내자료","경력 치과위생사의 현장 경험을 바탕으로 제작합니다. 환자가 자주 묻는 질문과 직원이 반복해서 안내하는 내용을 정리해 진료실, 데스크, 환자의 집에서 다시 꺼내 볼 수 있도록 설계합니다."],
+["정확성과 개인정보 보호","표현의 근거와 적용 범위를 확인하고, 치료 결과를 보장하거나 불안을 유발하는 표현을 사용하지 않습니다. 제작과 문의 과정에서 환자 이름, 사진, 연락처, 차트 및 진료정보를 수집하지 않는 것을 원칙으로 합니다."]];
+return <section className="section wrap"><div className="section-head"><div><span className="section-kicker">OUR START</span><h2>충분히 설명한 마음이<br/>환자에게 오래 남도록.</h2></div></div><div className="detail-grid">{items.map(([a,b],i)=><article key={a}><span>0{i+1}</span><h2>{a}</h2><p>{b}</p></article>)}</div><Safety/></section>}
+function Cases(){const steps=[["진료실에서 설명","그림으로 핵심을 짚습니다.","담당 의료진이 안내자료를 보며 환자에게 필요한 내용을 설명합니다."],["데스크에서 전달","다시 볼 자료를 건넵니다.","인쇄물을 전달하거나 치과의 문자·QR 안내 방식으로 연결합니다."],["휴대폰으로 확인","함께 열어 봅니다.","환자 또는 보호자가 내용을 확인할 수 있는지 점검합니다."],["집에서 다시 확인","필요할 때 꺼내 봅니다.","자료를 다시 확인하고, 개인 상태에 관한 질문은 담당 치과에 문의합니다."]];return <section className="section wrap"><div className="section-head"><div><span className="section-kicker">활용 시나리오</span><h2>한 번의 설명을<br/>여러 순간에 연결합니다.</h2></div></div><ol className="scenario-flow">{steps.map(([title,lead,text],i)=><li key={title}><span className="step-number">0{i+1}</span><h2>{title}</h2><h3>{lead}</h3><p>{text}</p>{i<3&&<ArrowRight className="flow-arrow" aria-hidden="true"/>}</li>)}</ol><div className="detail-grid scenario-notes"><article><h2>어르신 환자가 많은 치과</h2><p>큰 글씨의 인쇄물을 기본으로 전달하고, 필요하면 보호자와 함께 확인합니다. 휴대폰 사용이 익숙하지 않은 환자도 자료를 다시 볼 수 있도록 안내합니다.</p></article><article><h2>안내 표현을 통일하려는 치과</h2><p>담당 치과의사가 확인한 내용을 바탕으로 인쇄물, 문자와 대기실 화면의 핵심 표현을 맞춥니다. 직원이 바뀌어도 같은 기준으로 안내할 수 있게 활용합니다.</p></article></div><Safety/></section>}
+function Resources(){return <section className="section wrap"><div className="section-head"><div><span className="section-kicker">TOPICS</span><h2>앞으로 함께 나눌 주제</h2></div><p>아직 공개된 게시물은 없습니다.</p></div><div className="general-grid">{["치료 후 주의사항","어르신 환자 설명법","치과 환자교육","치과 반복업무 줄이기","인쇄물, 문자, QR 활용법"].map((x,i)=><article key={x}><span>0{i+1}</span><FileText/><h2>{x}</h2><p className="preparing">콘텐츠 준비 중</p></article>)}</div></section>}
+function FAQ(){const q=[
+["어떤 치과에 적합한가요?","어르신 환자가 많거나 치료 후 주의사항을 반복해 설명하는 치과, 환자 안내자료의 표현을 통일하려는 치과에 적합합니다. 인쇄물과 문자, QR, 대기실 화면을 함께 활용하려는 경우에도 살펴보세요."],
+["구매 후 바로 사용할 수 있나요?","현재 제공 구성과 전달 절차를 준비하고 있습니다. 파일별 사용 환경과 제공 일정을 도입 전에 확인해 주세요. 자료를 받은 뒤에는 담당 치과의사의 최종 확인을 거쳐 사용해야 합니다."],
+["치과 로고를 넣을 수 있나요?","치과 로고 적용은 도입 문의에서 상담할 수 있습니다. 적용 가능한 자료와 위치, 필요한 파일 형식은 제작 전에 확인합니다."],
+["안내 내용을 수정할 수 있나요?","수정 가능한 범위와 편집 파일 제공 여부는 자료별로 확인이 필요합니다. 치과의 안내 방침에 맞춘 수정은 도입 전에 협의하고, 수정된 의료 내용도 담당 치과의사가 확인해야 합니다."],
+["인쇄와 휴대폰 전송에 모두 사용할 수 있나요?","인쇄용과 모바일용 자료를 각각의 환경에 맞게 활용할 수 있습니다. 선택한 구성에 두 형태가 모두 포함되는지와 문자·QR 연결 방식을 도입 전에 확인해 주세요."],
+["의료정보는 어떻게 검토하나요?","참고 근거와 정보의 적용 범위, 환자가 오해할 수 있는 표현을 확인하는 것을 원칙으로 합니다. 최종 사용 전 담당 치과의사가 내용과 치과의 진료 방침을 확인해야 합니다."],
+["구매한 파일을 다른 치과와 공유할 수 있나요?","이용 범위와 재배포 조건은 아직 확정되지 않았습니다. 다른 치과와 공유하거나 재배포하려는 경우 먼저 허용 범위를 확인해 주세요. 여러 지점에서 사용하려면 도입 문의에서 사용 범위를 협의할 수 있습니다."]];
+return <section className="section wrap"><div className="faq-list">{q.map(([a,b])=><details key={a}><summary>{a}<span className="faq-toggle" aria-hidden="true">+</span></summary><p>{b}</p></details>)}</div></section>}
+function FormPage({type}:{type:string}){const sample=type==="sample";return <section className="section wrap form-wrap"><div className="form-card"><span className="mock-badge">목업 화면 · 실제 접수 불가</span><h2>{sample?"무료 샘플 신청":"도입 문의"}</h2><p id="mock-description">입력 항목을 살펴보는 미리보기입니다. 전송 기능이 연결되지 않아 접수·저장·발송되지 않습니다. 실제 담당자 정보도 입력하지 마세요.</p><p className="privacy-note" id="privacy-note">환자 이름, 사진, 연락처, 차트 및 진료정보를 입력하지 마세요.</p><form aria-describedby="mock-description privacy-note"><fieldset disabled><legend className="sr-only">신청 화면 미리보기</legend><label>치과명<input name="clinic" placeholder="치과명 입력란 (목업)" autoComplete="off"/></label><label>담당자 이름<input name="manager" placeholder="담당자 이름 입력란 (목업)" autoComplete="off"/></label><label>이메일 또는 휴대전화<input name="reply" placeholder="회신받을 연락처 입력란 (목업)" autoComplete="off"/></label></fieldset><label>{sample?"필요한 안내자료":"문의 유형"}<select name="interest" defaultValue=""><option value="" disabled>항목을 살펴보세요 (목업)</option>{(sample?["치료 후 주의사항","인쇄용 환자 안내지","모바일 안내 콘텐츠","대기실 교육 콘텐츠","참여형 교육 게임"]:["기본 안내자료","치과 로고 적용","맞춤형 안내자료 제작","대기실 콘텐츠","참여형 교육 게임","기타 문의"]).map(x=><option key={x}>{x}</option>)}</select></label><label className="consent"><input type="checkbox" name="consent" disabled/><span>개인정보 수집 동의 (목업)</span></label><p className="form-policy">실제 접수 시작 전 수집 항목·목적·보유 기간과 동의 거부 시 안내를 제공할 예정입니다. 현재 개인정보를 수집하지 않습니다.</p><button type="button" className="btn primary" disabled>{sample?"샘플 신청 준비 중":"문의 접수 준비 중"}</button></form></div></section>}
+
