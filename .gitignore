@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.vercel/
+
+# Local environment files may contain secrets.
+.env
+.env.*
+!.env.example
+
+# Logs and operating-system files.
+*.log
+.DS_Store
+Thumbs.db
