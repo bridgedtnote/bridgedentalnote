@@ -14,7 +14,7 @@ ZIP 파일 자체만 올리면 Vercel에서 소스를 빌드할 수 없습니다
 1. Vercel에서 새 프로젝트를 추가하고 위 GitHub 저장소를 연결합니다.
 2. Framework Preset은 Next.js, Root Directory는 package.json이 있는 위치로 선택합니다.
 3. Build Command: npm run build / Install Command: npm ci / Output Directory: out
-4. Node.js는 22.13 이상을 사용합니다. 별도로 입력할 환경변수나 API 키는 없습니다.
+4. Node.js는 Vercel과 동일하게 22.x를 사용합니다. 별도로 입력할 환경변수나 API 키는 없습니다.
 5. Deploy를 실행합니다.
 
 vercel.json에 빌드 설정이 포함되어 있습니다.
