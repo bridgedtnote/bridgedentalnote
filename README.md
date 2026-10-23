@@ -32,8 +32,15 @@ npm run dev
 브라우저에서 http://localhost:3000 을 엽니다.
 배포용 검사는 npm run build 로 실행합니다.
 
-## 페이지
-/ · /about · /products · /cases · /resources · /faq · /sample · /contact
+## 게시판
+
+현재 공개 홈페이지(`/bridge-home/`)의 상단·하단 메뉴에 공지사항과 자료실을 추가했습니다.
+
+- `/notices/`: 공지사항 목록, 제목 검색, 페이지 이동, 글 상세
+- `/resources/`: 자료실 목록, 제목 검색, 페이지 이동, 글 상세와 외부 링크
+- `/admin/`: Supabase 관리자 계정 전용 등록·수정·삭제 화면
+
+Supabase 프로젝트 설정, RLS 정책, 환경 변수와 관리자 등록 방법은 [SUPABASE_SETUP.md](SUPABASE_SETUP.md)를 확인하세요. `.env.example`에는 변수 이름만 있으며 실제 키는 포함하지 않습니다.
 
 ## 주요 파일
 - app/page.tsx: 홈

@@ -1,1 +1,2 @@
-import {InfoPage} from "../info-page"; export default function Page(){return <InfoPage type="resources"/>}
+import { BoardPage } from "../board-page";
+export default function ResourcesPage(){ return <BoardPage board="resource"/>; }
