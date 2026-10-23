@@ -1,10 +1,5 @@
--- Run this migration in Supabase SQL Editor. Never expose the service_role key in the site.
-create table if not exists public.profiles (
-  id uuid primary key references auth.users(id) on delete cascade,
-  role text not null default 'member' check (role in ('member','admin')),
-  created_at timestamptz not null default now()
-);
-
+-- Apply in Supabase SQL Editor or with the Supabase migration tool.
+-- The browser only receives a publishable key. Do not use a service_role key here.
 create table if not exists public.board_posts (
   id uuid primary key default gen_random_uuid(),
   board text not null check (board in ('notice','resource')),
@@ -17,30 +12,29 @@ create table if not exists public.board_posts (
   updated_at timestamptz not null default now()
 );
 create index if not exists board_posts_public_list_idx on public.board_posts(board, is_published, created_at desc);
-
-create or replace function public.handle_new_user() returns trigger language plpgsql security definer set search_path=public as $$
-begin insert into public.profiles(id) values (new.id) on conflict (id) do nothing; return new; end; $$;
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created after insert on auth.users for each row execute procedure public.handle_new_user();
-
-create or replace function public.is_admin() returns boolean language sql stable security definer set search_path=public as $$
-  select exists(select 1 from public.profiles where id=auth.uid() and role='admin');
+create or replace function public.set_board_post_updated_at() returns trigger language plpgsql set search_path = '' as $$
+begin new.updated_at=now(); return new; end;
 $$;
-create or replace function public.set_updated_at() returns trigger language plpgsql as $$ begin new.updated_at=now(); return new; end; $$;
 drop trigger if exists board_posts_updated_at on public.board_posts;
-create trigger board_posts_updated_at before update on public.board_posts for each row execute procedure public.set_updated_at();
+create trigger board_posts_updated_at before update on public.board_posts for each row execute procedure public.set_board_post_updated_at();
 
-alter table public.profiles enable row level security;
 alter table public.board_posts enable row level security;
-drop policy if exists "users read own profile" on public.profiles;
-create policy "users read own profile" on public.profiles for select to authenticated using (id=auth.uid());
-drop policy if exists "admin reads profiles" on public.profiles;
-create policy "admin reads profiles" on public.profiles for select to authenticated using (public.is_admin());
+grant usage on schema public to anon, authenticated;
+grant select on public.board_posts to anon, authenticated;
+grant insert, update, delete on public.board_posts to authenticated;
+
+-- Admin authorization comes from app_metadata, which users cannot edit themselves.
+-- After setting it, the administrator must sign out and sign in again to refresh the JWT.
 drop policy if exists "published board posts are public" on public.board_posts;
-create policy "published board posts are public" on public.board_posts for select to anon, authenticated using (is_published or public.is_admin());
+create policy "published board posts are public" on public.board_posts for select to anon, authenticated
+  using (is_published or (select auth.jwt()->'app_metadata'->>'board_role') = 'admin');
 drop policy if exists "admin creates board posts" on public.board_posts;
-create policy "admin creates board posts" on public.board_posts for insert to authenticated with check (public.is_admin());
+create policy "admin creates board posts" on public.board_posts for insert to authenticated
+  with check ((select auth.jwt()->'app_metadata'->>'board_role') = 'admin');
 drop policy if exists "admin updates board posts" on public.board_posts;
-create policy "admin updates board posts" on public.board_posts for update to authenticated using (public.is_admin()) with check (public.is_admin());
+create policy "admin updates board posts" on public.board_posts for update to authenticated
+  using ((select auth.jwt()->'app_metadata'->>'board_role') = 'admin')
+  with check ((select auth.jwt()->'app_metadata'->>'board_role') = 'admin');
 drop policy if exists "admin deletes board posts" on public.board_posts;
-create policy "admin deletes board posts" on public.board_posts for delete to authenticated using (public.is_admin());
+create policy "admin deletes board posts" on public.board_posts for delete to authenticated
+  using ((select auth.jwt()->'app_metadata'->>'board_role') = 'admin');
