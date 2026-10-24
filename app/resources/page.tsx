@@ -1,1 +1,3 @@
-import {InfoPage} from "../info-page"; export default function Page(){return <InfoPage type="resources"/>}
+import { Suspense } from "react";
+import { BoardPage } from "../board-page";
+export default function ResourcesPage(){ return <Suspense fallback={null}><BoardPage board="resource"/></Suspense>; }

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <base href="/bridge-home/" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Bridge Dental Note 홈페이지 목업" />
+  <title>Bridge Dental Note</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon.png?v=2" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+    :root { --ink:#1c426d; --deep:#1c426d; --cream:#f7f4ee; --line:#dcd8d0; --muted:#6d7a89; --accent:#c8a57c; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--cream); font-family:'Noto Sans KR','DM Sans',sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    .header { height:78px; padding:0 clamp(24px,5vw,88px); display:flex; align-items:center; justify-content:space-between; background:transparent; border:0; position:absolute; top:0; left:0; right:0; z-index:3; }
+    .brand { display:flex; align-items:center; gap:13px; height:48px; color:var(--ink); font:600 19px 'Noto Sans KR',sans-serif; letter-spacing:-.035em; text-shadow:0 1px 3px rgba(247,244,238,.85); }
+    .header .brand { margin-left:clamp(0px,5vw,95px); }
+    @media (min-width:1024px) { .header .brand { margin-left:clamp(56px,9vw,178px); } }
+    .brand img { width:52px; height:52px; display:block; object-fit:contain; }
+    nav { display:flex; gap:clamp(17px,3vw,46px); font-size:14px; font-weight:500; }
+    .header nav { margin-right:clamp(0px,11vw,210px); }
+    nav a:hover { color:#9b7750; }
+    .hero { position:relative; aspect-ratio:3/1; overflow:hidden; background:#ded9ce; }
+    .hero img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+    .hero::before { content:''; position:absolute; z-index:1; top:0; left:0; right:0; height:128px; background:linear-gradient(180deg,rgba(247,244,238,.92) 0%,rgba(247,244,238,.56) 55%,rgba(247,244,238,0) 100%); -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 30%,rgba(0,0,0,.10) 40%,transparent 44%,transparent 61%,rgba(0,0,0,.10) 65%,#000 75%,#000 100%); mask-image:linear-gradient(90deg,#000 0%,#000 30%,rgba(0,0,0,.10) 40%,transparent 44%,transparent 61%,rgba(0,0,0,.10) 65%,#000 75%,#000 100%); }
+    .hero::after { content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(90deg,rgba(248,245,239,.72) 0%,rgba(248,245,239,.46) 26%,rgba(248,245,239,.12) 40%,rgba(248,245,239,0) 50%,rgba(248,245,239,0) 62%,rgba(14,31,47,.08) 100%); }
+    .hero-copy { position:absolute; z-index:2; top:50%; left:clamp(80px,14vw,266px); transform:translateY(-49%); font-family:'Noto Sans KR',sans-serif; font-size:clamp(24px,2.75vw,44px); line-height:1.58; letter-spacing:-.055em; font-weight:500; color:var(--ink); text-shadow:0 1px 8px rgba(247,244,238,.78); white-space:pre-line; }
+    .hero-ai-note { position:absolute; z-index:2; right:clamp(18px,3.2vw,64px); bottom:clamp(10px,1.2vw,16px); color:rgba(255,255,255,.82); font:400 clamp(10px,.72vw,13px) 'Noto Sans KR',sans-serif; letter-spacing:.01em; text-shadow:0 1px 4px rgba(0,0,0,.7); }
+    .hero-copy .rule { position:relative; width:84px; height:10px; display:block; margin:21px 0 0; }
+    .hero-copy .rule::before { content:''; position:absolute; top:50%; left:7px; right:7px; height:2px; background:var(--accent); }
+    .hero-copy .rule::after { content:''; position:absolute; top:1px; left:0; width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:76px 0 0 var(--accent); }
+    .motion-ready .hero-copy { animation:heroRise .95s cubic-bezier(.2,.7,.2,1) .12s both; }
+    .motion-ready .reveal-on-scroll { opacity:0; translate:0 24px; transition:opacity .82s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms), translate .82s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms); }
+    .motion-ready .reveal-on-scroll.is-visible { opacity:1; translate:0 0; }
+    @keyframes heroRise { from { opacity:0; translate:0 22px; } to { opacity:1; translate:0 0; } }
+    @keyframes detailRise { from { opacity:0; translate:0 16px; } to { opacity:1; translate:0 0; } }
+    @media (prefers-reduced-motion: reduce) { .hero-copy, .reveal-on-scroll { animation:none!important; opacity:1!important; translate:none!important; transition:none!important; } .story-panel { animation:none!important; } }
+    .intro { max-width:1260px; margin:0 auto; min-height:600px; padding:clamp(60px,9vw,126px) clamp(24px,5vw,70px); display:grid; grid-template-columns:minmax(0,1.22fr) minmax(290px,.78fr); gap:clamp(52px,9vw,150px); align-items:center; }
+    .eyebrow { color:#a27b50; letter-spacing:.14em; font:500 18px 'DM Sans',sans-serif; text-transform:uppercase; }
+    .intro-eyebrow { font-size:18px; }
+    .intro h1, .intro .body { font-size:clamp(25px,2.45vw,35px); line-height:1.55; letter-spacing:-.055em; font-weight:500; color:rgba(13,35,64,.78); white-space:pre-line; }
+    .intro h1 { margin:24px 0 0; }
+    .intro-title-line { display:block; }
+    .intro .body-line { display:block; }
+    .intro .body-desktop { display:none; }
+    .intro-lead { display:block; }
+    .reveal { display:block; margin-top:0; }
+    .reveal-label, .reveal strong { display:block; color:inherit; font:inherit; letter-spacing:inherit; }
+    .intro .body { margin:42px 0 0; }
+    .video-frame { width:min(100%,342px); margin-left:auto; background:#415167; padding:10px; border-radius:28px; overflow:hidden; box-shadow:0 22px 40px rgba(28,66,109,.17); }
+    .video-frame video { display:block; width:100%; aspect-ratio:9/16; object-fit:cover; background:#415167; border-radius:19px 19px 0 0; }
+    .video-caption { color:#e1e8f0; padding:12px 4px 4px; font-size:11px; letter-spacing:.03em; text-align:center; }
+    section { scroll-margin-top:0; }
+    .story { background:#F1EAE0; color:var(--deep); padding:clamp(76px,10vw,150px) clamp(24px,7vw,120px); }
+    .story-inner { max-width:1260px; margin:auto; }
+    .story .eyebrow { color:#a27b50; }
+    .story h2 { margin:15px 0 58px; font-size:clamp(30px,4.1vw,58px); font-weight:500; letter-spacing:-.06em; }
+    .story-grid { border-top:1px solid rgba(28,66,109,.42); }
+    .story-item { padding:0; border-bottom:1px solid rgba(28,66,109,.30); }
+    .story-trigger { position:relative; width:100%; padding:26px 36px 26px 0; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; display:grid; grid-template-columns:90px 1fr minmax(150px,360px); gap:25px; align-items:baseline; font:inherit; }
+    .story-item span { color:var(--deep); font:500 13px 'DM Sans',sans-serif; letter-spacing:.12em; }
+    .story-item h3 { margin:0; font-size:clamp(18px,2.2vw,28px); font-weight:500; letter-spacing:-.045em; }
+    .story-item p { margin:0; color:rgba(28,66,109,.92); font-size:16px; line-height:1.7; }
+    .story-trigger::after { content:'+'; position:absolute; right:4px; top:50%; transform:translateY(-50%); color:#a27b50; font:400 24px 'DM Sans',sans-serif; transition:transform .2s ease; }
+    .story-trigger[aria-expanded="true"]::after { content:'−'; }
+    .story-trigger:hover h3, .story-trigger:focus-visible h3 { color:#9b7750; }
+    .story-trigger:focus-visible { outline:2px solid #a27b50; outline-offset:3px; }
+    .story-panel { position:relative; z-index:0; display:none; width:100%; padding:22px 0 30px; color:#173b60; font-size:18px; line-height:2; }
+    .story-panel::before { content:""; position:absolute; z-index:-1; inset:0; background:#F7F4EE; }
+    .story-copy { width:750px; max-width:calc(100% - 152px); margin-left:152px; padding:0 18px 0 14px; }
+    .story-panel[hidden] { display:none; }
+    .story-item.is-open .story-panel { display:block; animation:detailRise .68s cubic-bezier(.2,.7,.2,1) both; }
+    .story-panel p { margin:0 0 18px; color:inherit; font-size:inherit; line-height:inherit; }
+    .story-panel p:last-child { margin-bottom:0; }
+    .story-panel strong { color:var(--deep); font-weight:700; }
+    .story-panel h4 { margin:26px 0 7px; color:var(--deep); font-size:18px; font-weight:700; }
+    .story-panel h4:first-child { margin-top:0; }
+    .story-panel h4::before { content:"•"; display:inline-block; margin-right:10px; color:#a27b50; }
+    .story-panel .research-authors { margin:0 0 5px; font-size:15px; line-height:1.7; }
+    .story-panel .research-title { margin:0 0 7px; font-size:16px; line-height:1.75; font-style:italic; }
+    .story-panel .research-journal { margin-bottom:8px; }
+    .story-panel .research-summary { margin-bottom:20px; }
+    @media (min-width:701px) { .story { min-height:100vh; display:block; padding-top:160px; padding-bottom:54px; } .story h2 { margin:12px 0 34px; font-size:clamp(32px,3.4vw,54px); } .story-trigger { padding-top:18px; padding-bottom:18px; } }
+    @media (min-width:1024px) { .story h2 { margin-bottom:76px; } }
+    @media (hover:none) and (pointer:coarse) { .story { min-height:auto; } .header nav { margin-right:0; } }
+    @media (hover:none) and (pointer:coarse) and (min-width:701px) { .story { padding-top:107px; padding-bottom:87px; } .story h2 { margin-bottom:54px; } }
+    .products { max-width:1260px; margin:auto; padding:clamp(78px,10vw,145px) clamp(24px,5vw,70px); }
+    .products h2 { margin:16px 0 48px; font-size:clamp(30px,4vw,54px); font-weight:500; letter-spacing:-.06em; }
+    .product-head { max-width:920px; margin-bottom:55px; }
+    .product-head p { margin:0; color:rgba(28,66,109,.92); font-size:16px; line-height:1.85; }
+    @media (min-width:1024px) { .products { min-height:100vh; padding-top:44px; padding-bottom:44px; display:flex; flex-direction:column; justify-content:center; } }
+    .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .card { position:relative; min-height:390px; overflow:hidden; border:1px solid var(--line); padding:27px; background:#fbfaf7; }
+    .card::before { content:''; position:absolute; top:30px; right:30px; width:34px; height:1px; background:#c9a67d; }
+    .card::after { content:''; position:absolute; top:27px; right:61px; width:7px; height:7px; border-radius:50%; background:#c9a67d; box-shadow:34px 0 0 #c9a67d; }
+    .card b { position:relative; z-index:1; display:block; font:500 13px 'DM Sans',sans-serif; color:#a27b50; letter-spacing:.1em; margin-bottom:17px; }
+    .card h3 { position:relative; z-index:1; margin:0; font-size:21px; letter-spacing:-.05em; font-weight:500; line-height:1.48; }
+    .product-media { position:absolute; left:18px; right:18px; bottom:18px; height:218px; overflow:hidden; border:1px solid rgba(28,66,109,.10); border-radius:2px; background:#f1ede5; }
+    .guide-image { position:absolute; z-index:1; left:50%; bottom:14px; width:50%; height:190px; object-fit:contain; object-position:center center; transform:translateX(-50%); filter:drop-shadow(0 12px 12px rgba(28,66,109,.13)); }
+    .guide-fan { position:absolute; z-index:1; left:50%; bottom:42px; width:180px; height:170px; transform:translateX(-50%); }
+    .guide-fan img { position:absolute; bottom:0; width:60px; height:120px; object-fit:cover; object-position:top; border:1px solid #d6d2ca; background:#fff; box-shadow:0 8px 12px rgba(28,66,109,.10); transform-origin:bottom center; }
+    .guide-fan img:nth-child(1) { left:0; transform:rotate(-14deg); z-index:12; }
+    .guide-fan img:nth-child(2) { left:9px; transform:rotate(-12deg); z-index:11; }
+    .guide-fan img:nth-child(3) { left:18px; transform:rotate(-10deg); z-index:10; }
+    .guide-fan img:nth-child(4) { left:27px; transform:rotate(-8deg); z-index:9; }
+    .guide-fan img:nth-child(5) { left:36px; transform:rotate(-5deg); z-index:8; }
+    .guide-fan img:nth-child(6) { left:45px; transform:rotate(-2deg); z-index:7; }
+    .guide-fan img:nth-child(7) { left:54px; transform:rotate(2deg); z-index:6; }
+    .guide-fan img:nth-child(8) { left:63px; transform:rotate(5deg); z-index:5; }
+    .guide-fan img:nth-child(9) { left:72px; transform:rotate(8deg); z-index:4; }
+    .guide-fan img:nth-child(10) { left:81px; transform:rotate(10deg); z-index:3; }
+    .guide-fan img:nth-child(11) { left:90px; transform:rotate(12deg); z-index:2; }
+    .guide-fan img:nth-child(12) { left:92px; width:auto; height:108px; max-width:none; object-fit:contain; object-position:center; transform:rotate(8deg); z-index:1; }
+    .guide-fan img:nth-child(1) { left:-2px; width:auto; height:120px; max-width:none; object-fit:contain; object-position:center; }
+    .fan-mockup { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center; }
+    .phone-preview { position:absolute; right:32px; bottom:15px; width:112px; height:181px; overflow:hidden; border:7px solid var(--deep); border-radius:22px; background:var(--deep); box-shadow:0 10px 16px rgba(28,66,109,.15); }
+    .single-guide { width:100%; height:100%; padding:12px 8px 7px; background:#fff; color:var(--deep); }
+    .single-guide span { display:inline-block; padding:3px 5px; border-radius:5px; background:var(--deep); color:#fff; font-size:7px; line-height:1; font-weight:600; }
+    .single-guide strong { display:block; margin:8px 0 6px; font-size:11px; line-height:1.28; letter-spacing:-.08em; }
+    .single-guide img { width:100%; height:76px; object-fit:cover; object-position:50% 10%; border-top:1px solid #d9e0e8; }
+    .digital-preview { position:absolute; z-index:1; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 53%; filter:saturate(.78) contrast(.94); }
+    .digital-overlay { position:absolute; z-index:2; inset:0; background:linear-gradient(90deg,rgba(28,66,109,.16),transparent 46%); pointer-events:none; }
+    .blog { background:#e9e5dd; padding:72px clamp(24px,7vw,120px); }
+    .blog-inner { max-width:1260px; margin:auto; display:block; }
+    .blog-head { display:flex; justify-content:space-between; align-items:end; gap:32px; margin-bottom:30px; }
+    .blog h2 { margin:12px 0 0; font-size:clamp(30px,4vw,48px); font-weight:500; letter-spacing:-.06em; }
+    .blog-intro { margin:10px 0 0; color:rgba(28,66,109,.92); font-size:16px; line-height:1.7; }
+    .blog-button { flex:0 0 auto; }
+    .blog-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+    .blog-card { display:block; min-width:0; overflow:hidden; aspect-ratio:4/5; border:1px solid rgba(36,55,70,.12); background:#fbfaf7; color:var(--ink); }
+    .blog-card-image { position:relative; display:block; width:100%; height:100%; overflow:hidden; background:#f7f4ee; }
+    .blog-card-image img { display:block; width:100%; height:100%; object-fit:cover; }
+    .blog-card-link:focus-visible, .button:focus-visible { outline:2px solid var(--deep); outline-offset:3px; }
+    .floating-home { position:fixed; right:clamp(16px,3vw,28px); bottom:calc(18px + env(safe-area-inset-bottom, 0px)); z-index:5; width:48px; height:48px; display:grid; place-items:center; border:1px solid rgba(28,66,109,.42); border-radius:50%; background:rgba(247,244,238,.94); color:var(--deep); box-shadow:0 4px 14px rgba(16,34,53,.14); transition:background .18s ease,color .18s ease; }
+    .floating-home svg { width:23px; height:23px; display:block; }
+    .floating-home:hover { background:var(--deep); color:var(--cream); }
+    .floating-home:focus-visible { outline:2px solid var(--deep); outline-offset:3px; }
+    @media (max-width:700px) { .story-panel { padding:18px 0 24px; font-size:17px; line-height:1.95; } .story-copy { width:auto; max-width:calc(100% - 67px); margin-left:67px; padding:0 14px; } .floating-home { width:44px; height:44px; right:16px; bottom:calc(14px + env(safe-area-inset-bottom, 0px)); } .floating-home svg { width:21px; height:21px; } }
+    .contact { background:#F7F4EE; color:var(--ink); padding:52px clamp(24px,7vw,120px); }
+    .contact-inner { max-width:1260px; margin:auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.8fr); align-items:center; gap:clamp(32px,6vw,76px); }
+    .contact-copy { grid-column:1; }
+    .contact-action { grid-column:2; display:flex; flex-direction:column; align-items:flex-end; width:100%; }
+    .contact h2 { margin:12px 0 20px; font-size:clamp(27px,3vw,40px); font-weight:500; line-height:1.4; letter-spacing:-.06em; }
+    .button { display:inline-block; border:1px solid var(--ink); padding:10px 16px; font-size:13px; font-weight:600; white-space:nowrap; }
+    .inquiry-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 16px; width:100%; max-width:560px; margin-top:16px; padding:16px; border:1px solid rgba(36,55,70,.22); background:rgba(247,244,238,.34); }
+    .inquiry-form[hidden] { display:none; }
+    .contact .button { appearance:none; display:inline-flex; align-items:center; justify-content:center; gap:12px; min-width:194px; min-height:56px; padding:14px 20px; border-color:var(--deep); background:var(--deep); color:var(--cream); font:600 14px 'Noto Sans KR',sans-serif; cursor:pointer; }
+    .contact .button svg { width:17px; height:17px; flex:none; }
+    .inquiry-field { display:flex; flex-direction:column; gap:6px; color:#243746; font-size:13px; font-weight:500; }
+    .inquiry-field input, .inquiry-field textarea { width:100%; border:1px solid rgba(36,55,70,.30); border-radius:2px; padding:10px 11px; background:#fbfaf7; color:#243746; font:400 14px 'Noto Sans KR',sans-serif; }
+    .inquiry-field input { min-height:42px; }
+    .inquiry-field textarea { min-height:88px; resize:vertical; }
+    .inquiry-field input:focus, .inquiry-field textarea:focus { outline:2px solid rgba(28,66,109,.35); outline-offset:1px; }
+    .inquiry-field.full, .privacy-row, .inquiry-notice, .inquiry-form button { grid-column:1/-1; }
+    .privacy-row { display:flex; align-items:flex-start; gap:8px; color:#243746; font-size:12px; line-height:1.6; }
+    .privacy-row input { margin:3px 0 0; accent-color:#1c426d; }
+    .inquiry-notice { margin:0; color:#354b5e; font-size:12px; line-height:1.65; }
+    .inquiry-form button[disabled] { justify-self:start; border:1px solid rgba(28,66,109,.35); padding:9px 14px; background:rgba(247,244,238,.45); color:#52677b; font:500 12px 'Noto Sans KR',sans-serif; cursor:not-allowed; }
+    .inquiry-dialog { width:min(94vw,720px); height:min(88vh,820px); max-width:none; max-height:none; padding:0; border:1px solid rgba(28,66,109,.22); border-radius:3px; background:var(--cream); color:var(--ink); box-shadow:0 20px 60px rgba(16,34,53,.28); }
+    .inquiry-dialog::backdrop { background:rgba(15,28,42,.62); }
+    .inquiry-dialog-head { height:54px; padding:0 16px 0 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
+    .inquiry-dialog-head strong { font-size:15px; font-weight:500; }
+    .inquiry-dialog-close { appearance:none; border:1px solid rgba(28,66,109,.35); padding:7px 12px; background:transparent; color:var(--ink); font:500 12px 'Noto Sans KR',sans-serif; cursor:pointer; }
+    .inquiry-dialog iframe { display:block; width:100%; height:calc(100% - 54px); border:0; background:#fff; }
+    .button:hover { background:var(--ink); color:#f7f4ee; }
+    footer { padding:25px clamp(24px,7vw,120px); background:var(--deep); color:#d7e1ed; font:400 11px 'DM Sans',sans-serif; letter-spacing:.1em; }
+    .footer-inner { max-width:1260px; margin:auto; display:flex; align-items:center; justify-content:flex-start; gap:clamp(80px,12vw,220px); }
+    .footer-nav { display:flex; gap:clamp(14px,2vw,28px); font:400 11px 'Noto Sans KR',sans-serif; letter-spacing:0; white-space:nowrap; }
+    .footer-nav a { color:#d7e1ed; opacity:.88; }
+    .footer-nav a:hover { opacity:1; color:#fff; }
+    @media (min-width:1024px) and (hover:hover) and (pointer:fine) {
+      .intro, .products { max-width:1400px; }
+      .story, .blog { padding-inline:clamp(24px,5vw,70px); }
+      .intro { padding-block:88px; grid-template-columns:minmax(0,1fr) 342px; gap:clamp(44px,5vw,80px); }
+      .intro > div:first-child { align-self:start; transform:none; }
+      .intro h1, .intro .body { white-space:normal; }
+      .intro h1 { font-size:clamp(25px,2.45vw,35px); line-height:1.55; letter-spacing:-.055em; margin-top:20px; }
+      .intro .body { margin-top:50px; line-height:1.65; }
+      .intro .video-frame { transform:translateX(-clamp(145px,11vw,180px)); }
+      .intro .body-mobile { display:none; }
+      .intro .body-desktop { display:block; }
+      .intro h1 .intro-title-line { display:block; }
+      .reveal, .reveal-label, .reveal strong { display:inline; }
+      .intro br.mobile-break { display:none; }
+      .story { min-height:auto; padding-block:88px; }
+      .products { min-height:100vh; padding-block:88px; display:flex; flex-direction:column; justify-content:center; }
+      .blog { padding-block:88px; }
+    }
+    @media (min-width:1024px) {
+      .intro .body-mobile { display:block; }
+      .intro .body-desktop { display:none; }
+      .intro br.mobile-break { display:none; }
+      .intro br.desktop-break { display:block; }
+      .intro h1 { margin-top:32px; }
+      .intro .video-frame { transform:translateX(-40px); }
+    }
+    @media (max-width:700px) { .header{height:68px;padding:0 16px}.brand{font-size:12px;gap:8px;font-weight:600}.header .brand{margin-left:0}.brand img{width:36px;height:36px}.header nav{margin-right:0} nav{gap:9px;font-size:10px;white-space:nowrap}.hero{aspect-ratio:1.7/1}.hero::before{height:95px}.hero img{object-position:61% center}.hero-copy{top:63%;left:24px;font-size:26px;line-height:1.55}.hero-ai-note{right:10px;bottom:8px;font-size:9px}.intro,.product-head{grid-template-columns:1fr}.intro{gap:48px}.video-frame{margin:auto;width:min(100%,300px)}.story-trigger{grid-template-columns:55px 1fr;gap:12px;padding:22px 30px 22px 0}.story-trigger > p{grid-column:2}.story-trigger::after{right:0}.story-panel{max-width:100%;padding:0 0 28px 67px;font-size:17px;line-height:1.95}.cards{grid-template-columns:1fr}.card{min-height:390px}.blog { padding-top:54px; padding-bottom:54px; }.blog-head { display:block; }.blog-button { margin-top:18px; }.blog-list { grid-template-columns:1fr; gap:14px; }.contact { padding-top:42px; padding-bottom:42px; }.contact-inner { grid-template-columns:1fr; gap:20px; }.contact-copy,.contact-action { grid-column:1; }.contact h2 { max-width:520px; }.contact .button { margin-top:0; }.inquiry-form { max-width:none; grid-template-columns:1fr; gap:11px; }.footer-inner{align-items:flex-start;flex-direction:column;gap:16px}.footer-nav{gap:16px;white-space:normal;font-size:11px} }
+    .intro .intro-eyebrow + h1 { margin-top:32px; }
+    .story .eyebrow + h2 { margin-top:23px; }
+    .products .eyebrow + h2 { margin-top:24px; }
+    .blog .eyebrow + h2, .contact .eyebrow + h2 { margin-top:20px; }
+    @media (min-width:701px) { .story .eyebrow + h2 { margin-top:20px; } }
+    @media (min-width:1024px) { .intro .intro-eyebrow + h1 { margin-top:40px; } }
+  </style>
+  <script>if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) document.documentElement.classList.add('motion-ready');</script>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="#top" aria-label="Bridge Dental Note 홈"><img src="logo.webp" alt="Bridge Dental Note 로고" /><span>브릿지 덴탈 노트</span></a>
+    <nav aria-label="주요 메뉴"><a href="#brand">브랜드 소개</a><a href="#products">제품·서비스</a><a href="/notices/">공지사항</a><a href="/resources/">자료실</a><a href="#blog">블로그</a><a href="#contact">문의</a></nav>
+  </header>
+  <main id="top">
+    <section class="hero" aria-label="브릿지 덴탈 노트 소개">
+      <img src="hero.webp" alt="환자에게 안내문을 보여주는 치과 의료진" />
+      <div class="hero-copy">치과의 언어를<br>환자의 일상으로<br>잇는<br>선<span class="rule" aria-hidden="true"></span></div>
+      <p class="hero-ai-note">AI로 생성한 이미지입니다</p>
+    </section>
+    <section class="intro" aria-label="치료 후 케어 소개">
+      <div><div class="eyebrow intro-eyebrow">Bridge Dental Note</div><h1><span class="intro-title-line">내원하시는 <br class="mobile-break">한 분 한 분을 위해 <br class="mobile-break">설계한</span><span class="intro-title-line">치료 후 케어는 <br class="mobile-break">휴대폰 속에 담겨</span><span class="intro-title-line reveal"><span class="reveal-label">필요한 순간마다</span> <strong>다시 열립니다.</strong></span></h1><p class="body body-mobile"><span class="body-line">진심 어린 배려와 <br class="mobile-break">존중이 담긴</span><span class="body-line">우리 치과의 세심함은</span><span class="body-line">진료실을 나선 뒤에도</span><span class="body-line">마음에 <br class="mobile-break desktop-break">오래 남습니다.</span></p><p class="body body-desktop"><span class="body-line">진심 어린 배려와 존중을 담아 준비한 안내는</span><span class="body-line">진료실을 나선 뒤에도 환자의 휴대폰에 남아</span><span class="body-line">필요한 순간마다 다시 열어 확인할 수 있습니다.</span><span class="body-line">치료 후 일상에서 궁금한 점이 생길 때도</span><span class="body-line">우리 치과의 세심한 안내를 이어서 확인할 수 있습니다.</span></p></div>
+      <div class="video-frame"><video controls muted playsinline preload="metadata" poster="video-thumbnail.webp"><source src="ad.mp4" type="video/mp4"></video><div class="video-caption">BRIDGE DENTAL NOTE · INTRODUCTION FILM</div></div>
+    </section>
+    <section class="story" id="brand"><div class="story-inner"><div class="eyebrow">Brand Story</div><h2>치과의 안내가<br>환자의 일상까지<br>자연스럽게 이어지도록</h2><div class="story-grid">
+      <article class="story-item"><button class="story-trigger" id="story-trigger-01" type="button" aria-expanded="false" aria-controls="story-panel-01"><span>01</span><h3>왜 브릿지 덴탈 노트인가?</h3><p>필요한 순간에 다시 확인하는 안내</p></button><div class="story-panel" id="story-panel-01" role="region" aria-labelledby="story-trigger-01" hidden>
+        <div class="story-copy">
+        <p>진료실에서 설명을 충분히 들어도, 시간이 지나면 주의사항이 희미해지고 궁금한 점이 생깁니다. 특히 시니어 환자에게 작은 글씨와 긴 설명은 다시 기억하기 어렵게 합니다.</p>
+        <p>진료 후 안내는 한 번 전달하고 끝나는 것이 아니라, 필요한 순간 다시 확인할 수 있어야 합니다.</p>
+        <p>브릿지 덴탈 노트는 큰 이미지와 간결한 문장, 음성·디지털 자료로 환자와 보호자가 필요한 내용을 쉽게 확인하도록 돕습니다. 안내는 휴대폰에 남아 언제든 다시 열어볼 수 있습니다.</p>
+        <p>환자에게는 안심을, 보호자에게는 함께 살필 수 있는 안정감을 전합니다. 그리고, 우리 치과에는 진료 후에도 이어지는 단단한 연결고리가 됩니다.</p>
+        <p>우리 치과의 존중과 배려가 환자의 일상에 오래 기억되는 좋은 경험으로 이어지도록 합니다.</p>
+        <p><strong>치과의 언어를 환자의 일상으로 잇는 선.</strong><br>그것이 브릿지 덴탈 노트가 존재하는 이유입니다.</p>
+        </div>
+      </div></article>
+      <article class="story-item"><button class="story-trigger" id="story-trigger-02" type="button" aria-expanded="false" aria-controls="story-panel-02"><span>02</span><h3>시니어를 존중하는 케어</h3><p>큰 글자·그림·음성으로 쉬운 이해를 돕는 안내</p></button><div class="story-panel" id="story-panel-02" role="region" aria-labelledby="story-trigger-02" hidden>
+        <div class="story-copy">
+        <p>시니어 환자에게는 치료 후 주의사항을 쉽게 확인하고 실천할 수 있는 안내가 필요합니다.</p>
+        <p>브릿지 덴탈 노트는 큰 이미지와 짧고 분명한 문장으로 내용을 나누어 보여줍니다. 음성·디지털 자료도 함께 활용해 환자와 보호자가 필요한 내용을 편하게 확인하도록 돕습니다.</p>
+        <p><strong>잘 보이고, 쉽게 읽히며, 필요할 때 다시 확인할 수 있는 안내.</strong></p>
+        <p><strong>시니어를 존중하는 진료 후 케어는 주의사항을 일상에서 확인하고 실천하도록 돕는 배려입니다.</strong></p>
+        </div>
+      </div></article>
+      <article class="story-item"><button class="story-trigger" id="story-trigger-03" type="button" aria-expanded="false" aria-controls="story-panel-03"><span>03</span><h3>환자의 일상에 남는 치과 경험</h3><p>진료 후에도 환자 휴대폰에 남는 우리 치과</p></button><div class="story-panel" id="story-panel-03" role="region" aria-labelledby="story-trigger-03" hidden>
+        <div class="story-copy">
+        <p>환자는 진료실에서의 경험뿐 아니라, 치과를 나선 뒤의 경험도 오래 기억합니다.</p>
+        <p>브릿지 덴탈 노트는 진료 후 안내를 환자 휴대폰에 남겨 필요한 순간 다시 열어볼 수 있도록 돕습니다.</p>
+        <p>환자와 보호자가 안내를 다시 확인할 때 치과의 세심한 케어도 함께 떠오릅니다. 이 디지털 접점은 진료가 끝난 뒤에도 치과와 환자의 연결을 이어줍니다.</p>
+        <p><strong>우리 치과의 배려가 환자의 일상에 오래 기억되는 좋은 경험으로 남도록.</strong></p>
+        </div>
+      </div></article>
+      <article class="story-item"><button class="story-trigger" id="story-trigger-04" type="button" aria-expanded="false" aria-controls="story-panel-04"><span>04</span><h3>연구를 바탕으로 설계한 안내</h3><p>이해와 실천을 돕는 근거 설계</p></button><div class="story-panel" id="story-panel-04" role="region" aria-labelledby="story-trigger-04" hidden>
+        <div class="story-copy">
+        <p>치과 환자교육 연구에서는 시청각·멀티미디어 안내가 치료 후 내용을 이해하고 기억하는 데 도움이 될 수 있다고 보고합니다.</p>
+        <h4>Ahmed Khalil Fawzy (2026) · 문헌고찰</h4>
+        <p class="research-title">Impact of Postoperative Instruction Delivery Methods on Patient Compliance After Minor Oral Surgeries: A Systematic Review</p>
+        <p class="research-journal"><strong>Clinical, Cosmetic and Investigational Dentistry, 18, 616315</strong><br>DOI: <strong>10.2147/CCIDE.S616315</strong></p>
+        <p class="research-summary">그림·시청각 자료와 모바일 앱이 구강수술 후 안내의 이해와 기억, 실천을 도울 수 있다고 분석했습니다.</p>
+        <h4>Ana Mladenovski (2008) · 예비연구</h4>
+        <p class="research-title">The Efficacy of Multimedia Pre-operative Information for Patients: A Pilot Study</p>
+        <p class="research-journal"><strong>New Zealand Dental Journal, 104(2), 36–43</strong></p>
+        <p class="research-summary">제3대구치 수술 환자 연구에서 멀티미디어 안내 그룹의 지식과 이해도가 안내문 그룹보다 높았습니다.</p>
+        <h4>Sung-Hwan Choi (2015) · 무작위 대조연구</h4>
+        <p class="research-title">Effect of Audiovisual Treatment Information on Relieving Anxiety in Patients Undergoing Impacted Mandibular Third Molar Removal</p>
+        <p class="research-journal"><strong>Journal of Oral and Maxillofacial Surgery, 73(11), 2087–2092</strong><br>DOI: <strong>10.1016/j.joms.2015.06.175</strong> · PMID: <strong>26212090</strong></p>
+        <p class="research-summary">매복 사랑니 발치 환자 연구에서 시청각 안내 그룹은 주의사항을 더 잘 기억했으며, 불안도도 낮았습니다.</p>
+        </div>
+      </div></article>
+    </div></div></section>
+    <section class="products" id="products"><div class="eyebrow">Products &amp; Service</div><h2>시니어 환자를 배려한<br>누구나 이해하기 쉬운<br>진료 후 안내사항</h2><div class="product-head"><p>치료별로 정리된 진료 후 안내 자료를 인쇄 안내지와 디지털 화면으로 제공합니다.<br>환자와 보호자가 필요한 순간 다시 확인할 수 있도록 큰 이미지와 음성, 간결한 문장으로 구성했습니다.</p></div><div class="cards"><article class="card"><b>01</b><h3>임플란트 수술 후<br>주의사항</h3><div class="product-media"><img class="guide-image" src="implant-guide.webp" alt="임플란트 수술 후 주의사항 안내지" /></div></article><article class="card"><b>02</b><h3>치료별 안내<br>12종 구성</h3><div class="product-media"><img class="fan-mockup" src="treatment-guide-fan.webp" alt="치료별 안내 12종 구성" /></div></article><article class="card"><b>03</b><h3>치료별 디지털<br>후속 안내</h3><div class="product-media"><img class="digital-preview" src="video-thumbnail.webp" alt="환자가 휴대폰으로 치료 후 안내를 확인하는 모습" /><span class="digital-overlay" aria-hidden="true"></span></div></article></div></section>
+    <section class="blog" id="blog"><div class="blog-inner"><div class="blog-head"><div><div class="eyebrow">Journal</div><h2>블로그</h2><p class="blog-intro">치과 진료 후 안내와 환자의 일상에 필요한 이야기를 전합니다.</p></div><a class="button blog-button" href="https://blog.naver.com/bridgedentalnote" target="_blank" rel="noopener">블로그 더 보기</a></div><div class="blog-list"><a class="blog-card blog-card-link" href="https://blog.naver.com/bridgedentalnote/224436719969" target="_blank" rel="noopener"><span class="blog-card-image"><img src="blog-latest.webp" alt="임플란트 수술 후 피가 나요, 괜찮은 걸까요? 대표 이미지" /></span></a><article class="blog-card blog-placeholder" aria-label="두 번째 블로그 카드 이미지 자리"><div class="blog-card-image"><img src="video-thumbnail.webp" alt="환자가 휴대폰으로 진료 후 안내를 확인하는 모습" /></div></article><article class="blog-card blog-placeholder" aria-label="세 번째 블로그 카드 이미지 자리"><div class="blog-card-image"><img src="hero.webp" alt="치과에서 안내를 전하는 모습" /></div></article></div></div></section>
+    <section class="contact" id="contact"><div class="contact-inner"><div class="contact-copy"><div class="eyebrow">Contact</div><h2>우리 치과의 진료 후 안내를<br>환자의 일상까지 이어보세요.</h2></div><div class="contact-action"><button class="button" type="button" id="toggle-inquiry" aria-haspopup="dialog" aria-controls="inquiry-dialog">샘플·상담 문의<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false"><path d="M3.5 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><dialog class="inquiry-dialog" id="inquiry-dialog" aria-labelledby="inquiry-dialog-title"><div class="inquiry-dialog-head"><strong id="inquiry-dialog-title">브릿지 덴탈 노트 상담·문의</strong><button class="inquiry-dialog-close" type="button" id="close-inquiry">닫기</button></div><iframe title="브릿지 덴탈 노트 상담·문의 양식" src="https://docs.google.com/forms/d/e/1FAIpQLSeZdlfFeYa231RTW6kmcy4RMhg-QO4PDespw2PaGgXiv6X6ng/viewform?embedded=true" loading="lazy">양식을 불러오지 못하면 <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZdlfFeYa231RTW6kmcy4RMhg-QO4PDespw2PaGgXiv6X6ng/viewform?usp=publish-editor" target="_blank" rel="noopener">새 창에서 문의 양식 열기</a></iframe></dialog></section>
+  </main>
+  <a class="floating-home" href="#top" aria-label="홈으로 이동" title="홈으로">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path d="M3.5 10.5 12 3.7l8.5 6.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M5.5 9.5v10.2h13V9.5M9.5 19.7v-6.2h5v6.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  <footer><div class="footer-inner"><span>© BRIDGE DENTAL NOTE</span><nav class="footer-nav" aria-label="하단 메뉴"><a href="#brand">브랜드 소개</a><a href="#products">제품·서비스</a><a href="/notices/">공지사항</a><a href="/resources/">자료실</a><a href="#blog">블로그</a><a href="#contact">문의</a></nav></div></footer>
+  <script>
+    if (document.documentElement.classList.contains("motion-ready")) {
+      const revealGroups = [
+        [".intro > div:first-child, .intro .video-frame", 130],
+        [".story-inner > .eyebrow, .story-inner > h2", 110],
+        [".story-item", 90],
+        [".products > .eyebrow, .products > h2, .product-head", 110],
+        [".cards .card", 120],
+        [".blog-head > div, .blog-button", 100],
+        [".blog-card", 120],
+        [".contact-copy, .contact-action", 120]
+      ];
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -36px 0px" });
+      revealGroups.forEach(([selector, stagger]) => {
+        document.querySelectorAll(selector).forEach((element, index) => {
+          element.classList.add("reveal-on-scroll");
+          element.style.setProperty("--reveal-delay", Math.min(index * stagger, 240) + "ms");
+          revealObserver.observe(element);
+        });
+      });
+    }
+    const inquiryToggle = document.getElementById("toggle-inquiry");
+    const inquiryDialog = document.getElementById("inquiry-dialog");
+    const inquiryClose = document.getElementById("close-inquiry");
+    document.querySelectorAll(".story-trigger").forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        const currentPanel = document.getElementById(trigger.getAttribute("aria-controls"));
+        const shouldOpen = trigger.getAttribute("aria-expanded") !== "true";
+        document.querySelectorAll(".story-trigger").forEach((otherTrigger) => {
+          const otherPanel = document.getElementById(otherTrigger.getAttribute("aria-controls"));
+          otherTrigger.setAttribute("aria-expanded", "false");
+          otherTrigger.closest(".story-item").classList.remove("is-open");
+          otherPanel.hidden = true;
+        });
+        if (shouldOpen) {
+          trigger.setAttribute("aria-expanded", "true");
+          trigger.closest(".story-item").classList.add("is-open");
+          currentPanel.hidden = false;
+        }
+      });
+    });
+    inquiryToggle.addEventListener("click", () => inquiryDialog.showModal());
+    inquiryClose.addEventListener("click", () => inquiryDialog.close());
+  </script>
+</body>
+</html>

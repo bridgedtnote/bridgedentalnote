@@ -1,0 +1,24 @@
+"use client";
+
+import Link from "next/link";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { supabase } from "../lib/supabase";
+
+type Board = "notice" | "resource";
+type Post = { id:string; board:Board; title:string; content:string; external_url:string|null; created_at:string };
+const PAGE_SIZE=8;
+const info={notice:{title:"공지사항",empty:"등록된 공지사항이 없습니다.",label:"JOURNAL"},resource:{title:"자료실",empty:"등록된 자료가 없습니다.",label:"BOARD"}};
+const date=(value:string)=>new Intl.DateTimeFormat("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(value));
+export function BoardPage({board}:{board:Board}){
+ const meta=info[board], router=useRouter(), params=useSearchParams();
+ const[posts,setPosts]=useState<Post[]>([]),[loading,setLoading]=useState(true),[failed,setFailed]=useState(false),[draft,setDraft]=useState(""),[term,setTerm]=useState(""),[page,setPage]=useState(1);
+ useEffect(()=>{let active=true;(async()=>{if(!supabase){if(active)setLoading(false);return;}const{data,error}=await supabase.from("board_posts").select("id,board,title,content,external_url,created_at").eq("board",board).eq("is_published",true).order("created_at",{ascending:false});if(!active)return;setPosts(data??[]);setFailed(Boolean(error));setLoading(false)})();return()=>{active=false}},[board]);
+ const selectedId=params.get("post"), selected=posts.find(post=>post.id===selectedId)??null;
+ const searched=useMemo(()=>posts.filter(post=>post.title.toLocaleLowerCase().includes(term.toLocaleLowerCase())),[posts,term]);
+ const totalPages=Math.max(1,Math.ceil(searched.length/PAGE_SIZE)),currentPage=Math.min(page,totalPages),visible=searched.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
+ function search(event:FormEvent){event.preventDefault();setTerm(draft.trim());setPage(1);router.replace(`/${board==="notice"?"notices":"resources"}/`)}
+ if(selected)return <main className="board-shell"><BoardHeader active={board}/><article className="board-container board-detail"><Link href={`/${board==="notice"?"notices":"resources"}/`} className="board-back">← {meta.title} 목록</Link><p className="board-label">{meta.label}</p><div className="detail-meta"><span className={`board-type ${board}`}>{board==="notice"?"공지사항":"자료실"}</span><time dateTime={selected.created_at}>{date(selected.created_at)}</time></div><h1>{selected.title}</h1><div className="board-content">{selected.content.split("\n").map((line,index)=><p key={index}>{line||" "}</p>)}</div>{selected.external_url&&<a className="board-link" href={selected.external_url} target="_blank" rel="noreferrer">관련 자료 보기 ↗</a>}<p className="board-safety">의료 안내자료는 최종 사용 전 담당 치과의사가 확인해야 합니다.</p></article></main>;
+ return <main className="board-shell"><BoardHeader active={board}/><section className="board-container"><header className="board-intro"><p className="board-label">{meta.label}</p><h1>{meta.title}</h1><p>브릿지 덴탈 노트의 새로운 소식과 안내 자료를 확인하세요.</p></header><form className="board-search" onSubmit={search}><label className="sr-only" htmlFor={`${board}-search`}>제목 검색</label><input id={`${board}-search`} value={draft} onChange={event=>setDraft(event.target.value)} placeholder="제목으로 검색"/><button type="submit">검색</button></form>{loading?<p className="board-status">게시글을 불러오는 중입니다.</p>:failed?<p className="board-status">게시글을 불러올 수 없습니다. 잠시 후 다시 확인해 주세요.</p>:<><div className="board-list" role="list">{visible.map(post=><Link role="listitem" className="board-row" href={`/${board==="notice"?"notices":"resources"}/?post=${post.id}`} key={post.id}><span className={`board-type ${post.board}`}>{post.board==="notice"?"공지사항":"자료실"}</span><strong>{post.title}</strong><time dateTime={post.created_at}>{date(post.created_at)}</time><span aria-hidden="true" className="board-arrow">→</span></Link>)}</div>{searched.length===0&&<p className="board-status">{term?"검색 결과가 없습니다.":meta.empty}</p>}{searched.length>PAGE_SIZE&&<nav className="board-pages" aria-label="페이지 이동">{Array.from({length:totalPages},(_,index)=><button type="button" key={index} className={currentPage===index+1?"is-current":""} onClick={()=>setPage(index+1)} aria-current={currentPage===index+1?"page":undefined}>{index+1}</button>)}</nav>}</>}<p className="board-safety">의료 안내자료는 최종 사용 전 담당 치과의사가 확인해야 합니다.</p></section></main>;
+}
+export function BoardHeader({active}:{active?:Board}){return <header className="board-header"><div className="board-header-inner"><Link href="/bridge-home/" className="board-brand">BRIDGE DENTAL NOTE</Link><nav aria-label="주요 메뉴"><Link href="/bridge-home/">홈</Link><Link href="/bridge-home/#blog">블로그</Link><Link href="/notices/" aria-current={active==="notice"?"page":undefined}>공지사항</Link><Link href="/resources/" aria-current={active==="resource"?"page":undefined}>자료실</Link><Link href="/bridge-home/#contact">문의</Link><Link href="/admin/">관리자</Link></nav></div></header>}
